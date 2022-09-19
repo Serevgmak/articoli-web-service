@@ -17,21 +17,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
-//import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-@RunWith(SpringRunner.class)
+
+
+@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class SelectArtTest
 {
 private MockMvc mockMvc;
-	
+
 	@Autowired
 	private WebApplicationContext wac;
 
@@ -41,7 +42,7 @@ private MockMvc mockMvc;
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
 
 	}
-	
+
 	String JsonData =  
 			"{\n" + 
 			"    \"codArt\": \"002000301\",\n" + 
@@ -50,7 +51,7 @@ private MockMvc mockMvc;
 			"    \"codStat\": \"\",\n" + 
 			"    \"pzCart\": 6,\n" + 
 			"    \"pesoNetto\": 1.5,\n" + 
-			"    \"idStatoArt\": \"1 \",\n" + 
+			"    \"idStatoArt\": \"1\",\n" + 
 			"    \"dataCreaz\": \"2010-06-14\",\n" + 
 			"    \"barcode\": [\n" + 
 			"        {\n" + 
@@ -69,11 +70,14 @@ private MockMvc mockMvc;
 			"        \"aliquota\": 22\n" + 
 			"    }\n" + 
 			"}";
-	
+
+	/*
+	 * 
+	 */
 	@Test
 	public void A_listArtByEan() throws Exception
 	{
-		mockMvc.perform(MockMvcRequestBuilders.get("/api/articoli/cerca/ean/8008490000021")
+		mockMvc.perform(MockMvcRequestBuilders.get("/articoli//cerca/ean/8008490000021")
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -91,7 +95,7 @@ private MockMvc mockMvc;
 				.andExpect(jsonPath("$.pesoNetto").exists())
 				.andExpect(jsonPath("$.pesoNetto").value("1.5"))
 				.andExpect(jsonPath("$.idStatoArt").exists())
-				.andExpect(jsonPath("$.idStatoArt").value("1 "))
+				.andExpect(jsonPath("$.idStatoArt").value("1"))
 				.andExpect(jsonPath("$.dataCreaz").exists())
 				.andExpect(jsonPath("$.dataCreaz").value("2010-06-14"))
 				 //barcode
@@ -113,16 +117,16 @@ private MockMvc mockMvc;
 				.andExpect(jsonPath("$.iva.descrizione").value("IVA RIVENDITA 22%"))
 				.andExpect(jsonPath("$.iva.aliquota").exists())
 				.andExpect(jsonPath("$.iva.aliquota").value("22"))	
-				
+
 				.andDo(print());
 	}
-	
+
 	private String Barcode = "8008490002138";
-	
+
 	@Test
-	public void B_ErrlistArtByEan() throws Exception
+	public void AA_ErrlistArtByEan() throws Exception
 	{
-		mockMvc.perform(MockMvcRequestBuilders.get("/api/articoli/cerca/ean/" + Barcode)
+		mockMvc.perform(MockMvcRequestBuilders.get("/articoli/cerca/ean/" + Barcode)
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(JsonData)
 				.accept(MediaType.APPLICATION_JSON))
@@ -131,24 +135,24 @@ private MockMvc mockMvc;
 				.andExpect(jsonPath("$.messaggio").value("Il barcode " + Barcode + " non è stato trovato!"))
 				.andDo(print());
 	}
-	
+
 	@Test
-	public void C_listArtByCodArt() throws Exception
+	public void B_listArtByCodArt() throws Exception
 	{
-		mockMvc.perform(MockMvcRequestBuilders.get("/api/articoli/cerca/codice/002000301")
+		mockMvc.perform(MockMvcRequestBuilders.get("/articoli/cerca/codice/002000301")
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 				.andExpect(content().json(JsonData)) 
 				.andReturn();
 	}
-	
+
 	private String CodArt = "002000301b";
-	
+
 	@Test
-	public void D_ErrlistArtByCodArt() throws Exception
+	public void BB_ErrlistArtByCodArt() throws Exception
 	{
-		mockMvc.perform(MockMvcRequestBuilders.get("/api/articoli/cerca/codice/" + CodArt)
+		mockMvc.perform(MockMvcRequestBuilders.get("/articoli/cerca/codice/" + CodArt)
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(JsonData)
 				.accept(MediaType.APPLICATION_JSON))
@@ -157,13 +161,13 @@ private MockMvc mockMvc;
 				.andExpect(jsonPath("$.messaggio").value("L'articolo con codice " + CodArt + " non è stato trovato!"))
 				.andDo(print());
 	}
-	
+
 	private String JsonData2 = "[" + JsonData + "]";
 
 	@Test
-	public void E_listArtByDesc() throws Exception
+	public void C_listArtByDesc() throws Exception
 	{
-		mockMvc.perform(MockMvcRequestBuilders.get("/api/articoli/cerca/descrizione/ACQUA ULIVETO 15 LT")
+		mockMvc.perform(MockMvcRequestBuilders.get("/articoli/cerca/descrizione/ACQUA ULIVETO 15 LT")
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$", hasSize(1)))

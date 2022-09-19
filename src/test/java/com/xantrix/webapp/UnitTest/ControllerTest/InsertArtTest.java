@@ -27,19 +27,19 @@ import org.springframework.web.context.WebApplicationContext;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class InsertArtTest
 {
-	 
+
     private MockMvc mockMvc;
-	
+
 	@Autowired
 	private WebApplicationContext wac;
-	
+
 	@Before
 	public void setup()
 	{
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
 
 	}
-	
+
 	String JsonData =  
 			"{\n" + 
 			"    \"codArt\": \"123Test\",\n" + 
@@ -54,22 +54,22 @@ public class InsertArtTest
 			"        \"id\": 1 \n" + 
 			"    }\n" + 
 			"}";
-	
+
 	@Test
 	public void A_testInsArticolo() throws Exception
 	{
-		mockMvc.perform(MockMvcRequestBuilders.post("/api/articoli/inserisci")
+		mockMvc.perform(MockMvcRequestBuilders.post("/articoli/inserisci")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(JsonData)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isCreated())
 				.andDo(print());
 	}
-	
+
 	@Test
 	public void B_testErrInsArticolo() throws Exception
 	{
-		mockMvc.perform(MockMvcRequestBuilders.post("/api/articoli/inserisci")
+		mockMvc.perform(MockMvcRequestBuilders.post("/articoli/inserisci")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(JsonData)
 				.accept(MediaType.APPLICATION_JSON))
@@ -78,7 +78,7 @@ public class InsertArtTest
 				.andExpect(jsonPath("$.messaggio").value("Articolo 123Test presente in anagrafica! Impossibile utilizzare il metodo POST"))
 				.andDo(print());
 	}
-	
+
 	String ErrJsonData =  
 					"{\n" + 
 					"    \"codArt\": \"123Test1\",\n" + 
@@ -93,11 +93,11 @@ public class InsertArtTest
 					"        \"id\": 1 \n" + 
 					"    }\n" + 
 					"}";
-	
+
 	@Test
 	public void C_testErrInsArticolo() throws Exception
 	{
-		mockMvc.perform(MockMvcRequestBuilders.post("/api/articoli/inserisci")
+		mockMvc.perform(MockMvcRequestBuilders.post("/articoli/inserisci")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(ErrJsonData)
 				.accept(MediaType.APPLICATION_JSON))
@@ -106,29 +106,29 @@ public class InsertArtTest
 				//.andExpect(jsonPath("$.messaggio").value("Articolo 123Test presente in anagrafica! Impossibile utilizzare il metodo POST"))
 				.andDo(print());
 	}
-	
+
 	@Test
 	public void D_testUpdArticolo() throws Exception
 	{
-		mockMvc.perform(MockMvcRequestBuilders.put("/api/articoli/modifica")
+		mockMvc.perform(MockMvcRequestBuilders.put("/articoli/modifica")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(JsonData)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isCreated())
 				.andDo(print());
 	}
-	
+
 	@Test
 	public void E_testDelArticolo() throws Exception
 	{
-		mockMvc.perform(MockMvcRequestBuilders.delete("/api/articoli/elimina/123Test")
+		mockMvc.perform(MockMvcRequestBuilders.delete("/articoli/elimina/123Test")
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.code").value("200 OK"))
+				.andExpect(jsonPath("$.code").value(200))
 				.andExpect(jsonPath("$.message").value("Eliminazione Articolo 123Test Eseguita Con Successo"))
 				.andDo(print());
 	}
-	
-	
-	
+
+
+
 }
