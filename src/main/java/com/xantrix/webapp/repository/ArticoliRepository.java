@@ -2,7 +2,7 @@ package com.xantrix.webapp.repository;
 
 import java.util.List;
 
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.*;
 
 import com.xantrix.webapp.entities.Articoli;;;

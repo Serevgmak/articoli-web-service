@@ -30,7 +30,7 @@ public class ArticoliRepositoryTest
 	@Test
 	public void TestfindByDescrizioneLike()
 	{
-		List<Articoli> items = articoliRepository.SelByDescrizioneLike("ACQUA ULIVETO%");
+		List<Articoli> items = articoliRepository.findByDescrizioneLike("ACQUA ULIVETO%");
 		assertEquals(2, items.size());
 	}
 	
